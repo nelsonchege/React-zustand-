@@ -31,7 +31,7 @@ function DeleteAllTask({ deleteTaskAll }) {
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent w="90%">
-          <ModalHeader>Do you really want to delete all tasks?</ModalHeader>
+          <ModalHeader>Do you really want to delete all Todos?</ModalHeader>
           <ModalFooter>
             <Button mr={3} onClick={onClose}>
               No
@@ -56,19 +56,19 @@ function DeleteTask({ task, deleteTask }) {
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent w="90%">
-          <ModalHeader>Você realmente deseja excluir a tarefa?</ModalHeader>
+          <ModalHeader>Do you really want to delete this Todo?</ModalHeader>
           <ModalBody>
             <Text>{task.body}</Text>
           </ModalBody>
           <ModalFooter>
             <Button mr={3} onClick={onClose}>
-              Não
+              No
             </Button>
             <Button
               colorScheme="blue"
               onClick={() => deleteTask(task.id, onClose)}
             >
-              Sim
+              Yes
             </Button>
           </ModalFooter>
         </ModalContent>
