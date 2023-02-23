@@ -101,23 +101,20 @@ function App() {
       />
 
       <Flex position="absolute" bottom="5">
-        <Link href="https://github.com/raminhuk" target="_blank">
+        <Link href="https://github.com/nelsonchege" target="_blank">
           <IconButton icon={<FaGithub />} isRound="true" size="md" m="1" />
         </Link>
         <Link
-          href="https://www.linkedin.com/in/fabio-junior-raminhuk-740669121/"
+          href="https://www.linkedin.com/in/nelson-chege-380949213"
           target="_blank"
         >
           <IconButton icon={<FaLinkedin />} isRound="true" size="md" m="1" />
         </Link>
-        <Link href="https://www.instagram.com/fabiormk/" target="_blank">
-          <IconButton icon={<FaInstagram />} isRound="true" size="md" m="1" />
-        </Link>
-        <Link href="https://twitter.com/fabio_rmk" target="_blank">
+        <Link
+          href="https://twitter.com/Nelsonchege13?t=gNPMyX59oM0b_lWMtzefSA&s=09"
+          target="_blank"
+        >
           <IconButton icon={<FaTwitter />} isRound="true" size="md" m="1" />
-        </Link>
-        <Link href="https://www.facebook.com/fabio.raminhuk" target="_blank">
-          <IconButton icon={<FaFacebook />} isRound="true" size="md" m="1" />
         </Link>
       </Flex>
     </VStack>
