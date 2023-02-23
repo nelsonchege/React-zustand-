@@ -14,7 +14,7 @@ a sample project on how zustand works
 - First is to Clone the Repository.
 
 ```bash
-git clone <copy link>
+git clone git@github.com:nelsonchege/React-zustand-.git
 ```
 
 - install dependancies
