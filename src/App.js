@@ -1,145 +1,127 @@
-import { Heading, IconButton, VStack, useColorMode, useDisclosure, useToast, Link, Flex } from "@chakra-ui/react";
-import TaskList from './components/tasks';
-import AddTask from './components/AddTask';
-import { FaSun, FaMoon, FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa'
-import { useState, useEffect } from 'react'
+import {
+  Flex,
+  Heading,
+  IconButton,
+  Link,
+  useColorMode,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import {
+  FaFacebook,
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaMoon,
+  FaSun,
+  FaTwitter,
+} from "react-icons/fa";
+import AddTask from "./components/AddTask";
+import TaskList from "./components/tasks";
+import { useToDoStore } from "./stores/useToDoStore";
 
 function App() {
+  const toast = useToast();
+  const tasks = useToDoStore((state) => state.todos);
+  const setTasks = useToDoStore((state) => state.addTodos);
+  const deleteTaskAll = useToDoStore((state) => state.deleteAllTodos);
+  const deleteTask = useToDoStore((state) => state.deleteSingleTodo);
 
-    const toast = useToast();
-    const [tasks, setTasks] = useState(
-        () => JSON.parse(localStorage.getItem('tasks')) || []
-    );
+  function checkTask(id) {
+    const newTasksCheck = tasks.map((task) => {
+      if (task.id === id) {
+        task.check = !task.check;
+      }
+      return task;
+    });
 
-    useEffect(() => {
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }, [tasks]);
+    setTasks(newTasksCheck);
+  }
 
-    function deleteTask(id){
-        const newTasks = tasks.filter((task) => {
-            return task.id !== id;
-        });
-        setTasks(newTasks);
+  function updateTask(id, body, onClose) {
+    const info = body.trim();
+
+    if (!info) {
+      toast({
+        title: "Enter Your Task",
+        position: "top",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
+
+      return;
     }
 
-    function deleteTaskAll(){
-        setTasks([]);
-    }
+    const newTasksUpdate = tasks.map((task) => {
+      if (task.id === id) {
+        task.body = body;
+        task.check = false;
+      }
+      return task;
+    });
 
-    function checkTask(id){
-        
-        const newTasksCheck = tasks.map((task, index, array) => {
-            if (task.id === id){
-               task.check = !task.check;
-            }
-            return task;
-        });
+    setTasks(newTasksUpdate);
 
-        setTasks(newTasksCheck);
-    }
+    onClose();
+  }
 
-    function updateTask(id, body, onClose){
+  function addTask(task) {
+    setTasks([...tasks, task]);
+  }
 
-        const info = body.trim();
+  const { colorMode, toggleColorMode } = useColorMode();
 
-        if (!info) {
-            toast({
-                title: 'Digite sua tarefa',
-                position: 'top',
-                status: 'warning',
-                duration: 2000,
-                isClosable: true,
-            });
-            
-            return;
-        }
+  return (
+    <VStack p={4} minH="100vh" pb={28}>
+      <IconButton
+        icon={colorMode === "light" ? <FaSun /> : <FaMoon />}
+        isRound="true"
+        size="md"
+        alignSelf="flex-end"
+        onClick={toggleColorMode}
+      />
 
-        const newTasksUpdate = tasks.map((task, index, array) => {
-            if (task.id === id){
-               task.body = body;
-               task.check = false
-            }
-            return task;
-        });
+      <Heading
+        p="5"
+        fontWeight="extrabold"
+        size="xl"
+        bgGradient="linear(to-l, teal.300, blue.500)"
+        bgClip="text"
+      >
+        To Do List
+      </Heading>
+      <AddTask addTask={addTask} />
+      <TaskList
+        tasks={tasks}
+        updateTask={updateTask}
+        deleteTask={deleteTask}
+        deleteTaskAll={deleteTaskAll}
+        checkTask={checkTask}
+      />
 
-        setTasks(newTasksUpdate);
-
-        onClose();
-    }
-
-    function addTask(task){
-        setTasks([...tasks, task]);
-    }
-
-    const { colorMode, toggleColorMode } = useColorMode();
-
-    return(
-        <VStack p={4} minH='100vh' pb={28}>
-            <IconButton 
-                icon={colorMode === 'light' ? <FaSun /> : <FaMoon />}
-                isRound='true'
-                size='md'
-                alignSelf='flex-end'
-                onClick={toggleColorMode}
-            />
-
-            <Heading
-                p='5'
-                fontWeight='extrabold'
-                size='xl'
-                bgGradient='linear(to-l, teal.300, blue.500)'
-                bgClip='text'
-            >
-                Lista de tarefas
-            </Heading>
-            <AddTask addTask={addTask} />
-            <TaskList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} deleteTaskAll={deleteTaskAll} checkTask={checkTask}/>
-            
-            <Flex position='absolute' bottom='5'>
-                <Link href='https://github.com/raminhuk' target='_blank' >
-                    <IconButton 
-                    icon={<FaGithub/>}
-                    isRound='true'
-                    size='md'
-                    m='1'
-                /> 
-                </Link>
-                <Link href='https://www.linkedin.com/in/fabio-junior-raminhuk-740669121/' target='_blank'>
-                    <IconButton 
-                    icon={<FaLinkedin/>}
-                    isRound='true'
-                    size='md'
-                    m='1'
-                /> 
-                </Link>
-                <Link href='https://www.instagram.com/fabiormk/' target='_blank'>
-                    <IconButton 
-                    icon={<FaInstagram/>}
-                    isRound='true'
-                    size='md'
-                    m='1'
-                /> 
-                </Link>
-                <Link href='https://twitter.com/fabio_rmk' target='_blank'>
-                    <IconButton 
-                    icon={<FaTwitter/>}
-                    isRound='true'
-                    size='md'
-                    m='1'
-                /> 
-                </Link>
-                <Link href='https://www.facebook.com/fabio.raminhuk' target='_blank'>
-                    <IconButton 
-                    icon={<FaFacebook/>}
-                    isRound='true'
-                    size='md'
-                    m='1'
-                /> 
-                </Link>
-            </Flex>
-        </VStack>
-    );
+      <Flex position="absolute" bottom="5">
+        <Link href="https://github.com/raminhuk" target="_blank">
+          <IconButton icon={<FaGithub />} isRound="true" size="md" m="1" />
+        </Link>
+        <Link
+          href="https://www.linkedin.com/in/fabio-junior-raminhuk-740669121/"
+          target="_blank"
+        >
+          <IconButton icon={<FaLinkedin />} isRound="true" size="md" m="1" />
+        </Link>
+        <Link href="https://www.instagram.com/fabiormk/" target="_blank">
+          <IconButton icon={<FaInstagram />} isRound="true" size="md" m="1" />
+        </Link>
+        <Link href="https://twitter.com/fabio_rmk" target="_blank">
+          <IconButton icon={<FaTwitter />} isRound="true" size="md" m="1" />
+        </Link>
+        <Link href="https://www.facebook.com/fabio.raminhuk" target="_blank">
+          <IconButton icon={<FaFacebook />} isRound="true" size="md" m="1" />
+        </Link>
+      </Flex>
+    </VStack>
+  );
 }
 
 export default App;
-
